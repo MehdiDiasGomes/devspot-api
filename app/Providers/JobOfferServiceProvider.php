@@ -25,12 +25,10 @@ final class JobOfferServiceProvider extends ServiceProvider
 
             return new FetchJobOffersUseCase(
                 sources: [
-                    new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'fr', location: 'Metz'),
-                    new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'lu'),
+                    new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'fr'),
                     new FranceTravailAdapter(
                         clientId: config('services.france_travail.client_id'),
                         clientSecret: config('services.france_travail.client_secret'),
-                        department: '57',
                     ),
                 ],
                 repository: $app->make(JobOfferRepositoryPort::class),

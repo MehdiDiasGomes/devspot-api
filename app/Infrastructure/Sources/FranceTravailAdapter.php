@@ -31,7 +31,7 @@ final class FranceTravailAdapter implements JobSourcePort
     public function __construct(
         private readonly string $clientId,
         private readonly string $clientSecret,
-        private readonly string $department,
+        private readonly ?string $department = null,
     ) {}
 
     public function fetchOffers(): array
@@ -43,13 +43,18 @@ final class FranceTravailAdapter implements JobSourcePort
         }
 
         try {
+            $params = [
+                'motsCles' => 'développeur fullstack',
+                'nbMaxResultats' => 150,
+            ];
+
+            if ($this->department !== null) {
+                $params['departement'] = $this->department;
+            }
+
             $response = Http::timeout(15)
                 ->withToken($token)
-                ->get(self::SEARCH_ENDPOINT, [
-                    'motsCles' => 'développeur fullstack',
-                    'departement' => $this->department,
-                    'nbMaxResultats' => 150,
-                ]);
+                ->get(self::SEARCH_ENDPOINT, $params);
 
             if (!$response->successful()) {
                 Log::error('FranceTravail search failed', ['status' => $response->status()]);
