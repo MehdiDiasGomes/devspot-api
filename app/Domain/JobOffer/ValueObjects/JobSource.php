@@ -7,4 +7,5 @@ namespace App\Domain\JobOffer\ValueObjects;
 enum JobSource: string
 {
     case Adzuna = 'adzuna';
+    case FranceTravail = 'france_travail';
 }

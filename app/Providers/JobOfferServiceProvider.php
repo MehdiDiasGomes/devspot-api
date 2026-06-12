@@ -9,6 +9,7 @@ use App\Application\JobOffer\UseCases\ListJobOffersUseCase;
 use App\Domain\JobOffer\Ports\JobOfferRepositoryPort;
 use App\Infrastructure\Persistence\Repositories\EloquentJobOfferRepository;
 use App\Infrastructure\Sources\AdzunaAdapter;
+use App\Infrastructure\Sources\FranceTravailAdapter;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,11 @@ final class JobOfferServiceProvider extends ServiceProvider
                 sources: [
                     new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'fr', location: 'Metz'),
                     new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'lu'),
+                    new FranceTravailAdapter(
+                        clientId: config('services.france_travail.client_id'),
+                        clientSecret: config('services.france_travail.client_secret'),
+                        department: '57',
+                    ),
                 ],
                 repository: $app->make(JobOfferRepositoryPort::class),
             );
