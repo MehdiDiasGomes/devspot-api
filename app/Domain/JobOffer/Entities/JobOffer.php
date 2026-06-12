@@ -28,6 +28,8 @@ final class JobOffer
         public readonly string $sourceId,
         public readonly string $deduplicationHash,
         public readonly \DateTimeImmutable $publishedAt,
+        public readonly ?float $latitude = null,
+        public readonly ?float $longitude = null,
         public readonly ?string $id = null,
     ) {}
 
@@ -51,6 +53,8 @@ final class JobOffer
         string $sourceUrl,
         string $sourceId,
         \DateTimeImmutable $publishedAt,
+        ?float $latitude = null,
+        ?float $longitude = null,
     ): self {
         $hash = md5(
             strtolower(trim($title))
@@ -74,6 +78,8 @@ final class JobOffer
             sourceId: $sourceId,
             deduplicationHash: $hash,
             publishedAt: $publishedAt,
+            latitude: $latitude,
+            longitude: $longitude,
         );
     }
 }

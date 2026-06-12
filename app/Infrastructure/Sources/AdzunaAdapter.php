@@ -99,6 +99,8 @@ final class AdzunaAdapter implements JobSourcePort
                 sourceUrl: $job['redirect_url'],
                 sourceId: (string) $job['id'],
                 publishedAt: new \DateTimeImmutable($job['created']),
+                latitude: isset($job['latitude']) ? (float) $job['latitude'] : null,
+                longitude: isset($job['longitude']) ? (float) $job['longitude'] : null,
             );
         } catch (\Throwable $e) {
             Log::warning('Adzuna: failed to map job offer', ['job' => $job, 'error' => $e->getMessage()]);

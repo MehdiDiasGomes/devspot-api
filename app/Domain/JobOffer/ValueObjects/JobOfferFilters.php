@@ -16,5 +16,8 @@ final class JobOfferFilters
         public readonly ?JobType $type = null,
         public readonly ?bool $isRemote = null,
         public readonly array $tags = [],
+        public readonly ?float $latitude = null,
+        public readonly ?float $longitude = null,
+        public readonly ?int $radius = null,
     ) {}
 }

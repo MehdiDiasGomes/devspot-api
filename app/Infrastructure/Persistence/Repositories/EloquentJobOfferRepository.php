@@ -36,6 +36,8 @@ final class EloquentJobOfferRepository implements JobOfferRepositoryPort
             'source_id' => $offer->sourceId,
             'deduplication_hash' => $offer->deduplicationHash,
             'published_at' => $offer->publishedAt->format('Y-m-d H:i:s'),
+            'latitude' => $offer->latitude,
+            'longitude' => $offer->longitude,
             'created_at' => $now,
             'updated_at' => $now,
         ], $offers);
@@ -79,6 +81,20 @@ final class EloquentJobOfferRepository implements JobOfferRepositoryPort
             $query->whereJsonContains('tags', $tag);
         }
 
+        // Haversine radius filter — only applied when lat, lng and radius are all provided
+        if ($filters->latitude !== null && $filters->longitude !== null && $filters->radius !== null) {
+            $lat = $filters->latitude;
+            $lng = $filters->longitude;
+            $radius = $filters->radius;
+
+            $query->whereNotNull('latitude')
+                ->whereNotNull('longitude')
+                ->whereRaw(
+                    '(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) <= ?',
+                    [$lat, $lng, $lat, $radius]
+                );
+        }
+
         $paginated = $query
             ->orderByDesc('published_at')
             ->paginate(perPage: $perPage, page: $page);
@@ -109,6 +125,8 @@ final class EloquentJobOfferRepository implements JobOfferRepositoryPort
             sourceId: $model->source_id,
             deduplicationHash: $model->deduplication_hash,
             publishedAt: new \DateTimeImmutable($model->published_at->toDateTimeString()),
+            latitude: $model->latitude,
+            longitude: $model->longitude,
             id: $model->id,
         );
     }

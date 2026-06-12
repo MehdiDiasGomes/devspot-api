@@ -27,6 +27,9 @@ final class JobOfferController extends Controller
             type: $request->filled('type') ? JobType::from($request->string('type')->value()) : null,
             isRemote: $request->has('is_remote') ? $request->boolean('is_remote') : null,
             tags: $request->array('tags'),
+            latitude: $request->filled('lat') ? (float) $request->input('lat') : null,
+            longitude: $request->filled('lng') ? (float) $request->input('lng') : null,
+            radius: $request->filled('radius') ? $request->integer('radius') : null,
         );
 
         $page = $this->listJobOffersUseCase->execute(

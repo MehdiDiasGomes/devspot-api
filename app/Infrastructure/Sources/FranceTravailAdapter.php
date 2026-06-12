@@ -121,6 +121,8 @@ final class FranceTravailAdapter implements JobSourcePort
                 sourceUrl: $sourceUrl,
                 sourceId: $job['id'],
                 publishedAt: new \DateTimeImmutable($job['dateCreation']),
+                latitude: isset($job['lieuTravail']['latitude']) ? (float) $job['lieuTravail']['latitude'] : null,
+                longitude: isset($job['lieuTravail']['longitude']) ? (float) $job['lieuTravail']['longitude'] : null,
             );
         } catch (\Throwable $e) {
             Log::warning('FranceTravail: failed to map job offer', ['job' => $job, 'error' => $e->getMessage()]);

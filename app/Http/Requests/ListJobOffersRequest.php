@@ -29,6 +29,9 @@ final class ListJobOffersRequest extends FormRequest
             'tags.*' => ['string', 'max:50'],
             'page' => ['sometimes', 'integer', 'min:1'],
             'per_page' => ['sometimes', 'integer', 'min:1', 'max:100'],
+            'lat' => ['sometimes', 'numeric', 'between:-90,90'],
+            'lng' => ['sometimes', 'numeric', 'between:-180,180'],
+            'radius' => ['sometimes', 'integer', 'min:1', 'max:500'],
         ];
     }
 }

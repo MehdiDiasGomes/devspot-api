@@ -31,6 +31,8 @@ final class JobOfferModel extends Model
         'source_id',
         'deduplication_hash',
         'published_at',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
@@ -39,5 +41,7 @@ final class JobOfferModel extends Model
         'salary_max' => 'integer',
         'tags' => 'array',
         'published_at' => 'datetime',
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 }
