@@ -1,6 +1,7 @@
 services:
 
   # ── Laravel app (PHP-FPM + Nginx bundled via serversideup) ───────────────
+  # Exposed on 127.0.0.1:8010 — the host nginx proxies to this port
   app:
     build: .
     image: devspot-api:latest
@@ -9,31 +10,12 @@ services:
     environment:
       DB_HOST: postgres
       REDIS_HOST: redis
+    ports:
+      - "127.0.0.1:8010:8080"
     depends_on:
       postgres:
         condition: service_healthy
     networks: [internal]
-
-  # ── Nginx reverse proxy (SSL termination + proxy to app:8080) ────────────
-  nginx:
-    image: nginx:1.27-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./docker/nginx/app.conf:/etc/nginx/conf.d/default.conf:ro
-      - certbot-www:/var/www/certbot:ro
-      - certbot-certs:/etc/letsencrypt:ro
-    depends_on: [app]
-    networks: [internal]
-
-  # ── Certbot — SSL certificate management (run manually, not as daemon) ───
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - certbot-www:/var/www/certbot
-      - certbot-certs:/etc/letsencrypt
 
   # ── PostgreSQL ────────────────────────────────────────────────────────────
   postgres:
@@ -78,5 +60,3 @@ networks:
 
 volumes:
   postgres-data:
-  certbot-www:
-  certbot-certs:
