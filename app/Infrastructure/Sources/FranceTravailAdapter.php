@@ -116,7 +116,9 @@ final class FranceTravailAdapter implements JobSourcePort
                 company: $job['entreprise']['nom'] ?? 'Non renseigné',
                 location: $location,
                 isRemote: false,
-                type: self::JOB_TYPE_MAP[$typeContrat] ?? JobType::Other,
+                type: JobTitleHelper::isAlternance($job['intitule'])
+                    ? JobType::Internship
+                    : (self::JOB_TYPE_MAP[$typeContrat] ?? JobType::Other),
                 salaryMin: null,
                 salaryMax: null,
                 salaryCurrency: null,
