@@ -17,6 +17,22 @@ services:
       timeout: 5s
       retries: 5
 
+  scheduler:
+    image: serversideup/php:8.4-cli
+    container_name: devspot_scheduler
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: php artisan schedule:work
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    environment:
+      DB_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   adminer:
     image: adminer:latest
     container_name: devspot_adminer
