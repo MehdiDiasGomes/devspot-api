@@ -9,6 +9,7 @@ return [
 
     'allowed_origins' => [
         'https://devspot.mdiasgomes.com',
+        'http://localhost:3000',
     ],
 
     'allowed_origins_patterns' => [],
