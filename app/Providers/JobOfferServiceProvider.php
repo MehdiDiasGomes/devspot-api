@@ -9,7 +9,6 @@ use App\Application\JobOffer\UseCases\ListJobOffersUseCase;
 use App\Domain\JobOffer\Ports\JobOfferRepositoryPort;
 use App\Infrastructure\Persistence\Repositories\EloquentJobOfferRepository;
 use App\Infrastructure\Sources\AdzunaAdapter;
-use App\Infrastructure\Sources\RemotiveAdapter;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,7 +24,6 @@ final class JobOfferServiceProvider extends ServiceProvider
 
             return new FetchJobOffersUseCase(
                 sources: [
-                    $app->make(RemotiveAdapter::class),
                     new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'fr', location: 'Metz'),
                     new AdzunaAdapter(appId: $appId, appKey: $appKey, country: 'lu'),
                 ],
