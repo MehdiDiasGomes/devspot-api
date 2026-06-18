@@ -10,7 +10,7 @@ use App\Domain\JobOffer\ValueObjects\JobSource;
 use App\Domain\JobOffer\ValueObjects\JobType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListJobOffersRequest;
-use App\Http\Resources\JobOfferResource;
+use App\Http\Resources\JobOfferCollection;
 use Illuminate\Http\JsonResponse;
 
 final class JobOfferController extends Controller
@@ -38,14 +38,6 @@ final class JobOfferController extends Controller
             perPage: $request->integer('per_page', 20),
         );
 
-        return response()->json([
-            'data' => JobOfferResource::collection($page->items),
-            'meta' => [
-                'total' => $page->total,
-                'per_page' => $page->perPage,
-                'current_page' => $page->currentPage,
-                'last_page' => $page->lastPage,
-            ],
-        ]);
+        return (new JobOfferCollection($page))->response();
     }
 }
