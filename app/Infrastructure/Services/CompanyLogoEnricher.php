@@ -66,11 +66,17 @@ final class CompanyLogoEnricher
 
             foreach ($responses as $i => $response) {
                 $normalized = $normalizedKeys[$i];
+                $original = $originals[$i];
                 $logoUrl = null;
 
                 if (!($response instanceof \Throwable) && $response->successful()) {
                     $results = $response->json();
-                    $logoUrl = is_array($results) && !empty($results) ? ($results[0]['icon'] ?? null) : null;
+                    if (is_array($results) && !empty($results)) {
+                        $brandName = $results[0]['name'] ?? '';
+                        if ($this->isSufficientMatch($original, $brandName)) {
+                            $logoUrl = $results[0]['icon'] ?? null;
+                        }
+                    }
                 }
 
                 CompanyLogoModel::create([
@@ -89,6 +95,33 @@ final class CompanyLogoEnricher
 
             return $logoUrl !== null ? $offer->withLogoUrl($logoUrl) : $offer;
         }, $offers);
+    }
+
+    /**
+     * Returns true if the Brandfetch result name is a close enough match
+     * to the searched company name to be trusted.
+     *
+     * Uses similar_text similarity with a 75% threshold, and rejects results
+     * where the brand name is more than 50% longer than the searched name
+     * (prevents "Open" → "OpenAI" type false positives).
+     */
+    private function isSufficientMatch(string $searched, string $brandName): bool
+    {
+        $a = $this->normalize($searched);
+        $b = $this->normalize($brandName);
+
+        if ($a === '' || $b === '') {
+            return false;
+        }
+
+        // Reject if brand name is significantly longer than searched name
+        if (strlen($b) >= strlen($a) * 1.5) {
+            return false;
+        }
+
+        similar_text($a, $b, $percent);
+
+        return $percent >= 75.0;
     }
 
     /**

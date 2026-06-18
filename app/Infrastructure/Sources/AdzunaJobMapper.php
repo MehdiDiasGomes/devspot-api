@@ -20,8 +20,7 @@ final class AdzunaJobMapper
 
     private const array JOB_TYPE_MAP = [
         'permanent' => JobType::FullTime,
-        'contract' => JobType::Contract,
-        'part_time' => JobType::PartTime,
+        'contract'  => JobType::Contract,
     ];
 
     public static function toJobOffer(array $job, string $country): ?JobOffer
@@ -30,7 +29,7 @@ final class AdzunaJobMapper
             $location = $job['location']['display_name'] ?? null;
             $salaryMin = isset($job['salary_min']) ? (int) $job['salary_min'] : null;
             $salaryMax = isset($job['salary_max']) ? (int) $job['salary_max'] : null;
-            $contractType = $job['contract_type'] ?? $job['contract_time'] ?? '';
+            $contractType = $job['contract_type'] ?? '';
             $currency = self::CURRENCY_MAP[$country] ?? 'EUR';
 
             return JobOffer::create(
