@@ -17,7 +17,7 @@ final class JobOfferResource extends JsonResource
         $offer = $this->resource;
 
         return [
-            'id' => $offer->id,
+            'id' => $offer->sourceId,
             'title' => $offer->title,
             'company' => $offer->company,
             'company_logo_url' => $offer->companyLogoUrl,
