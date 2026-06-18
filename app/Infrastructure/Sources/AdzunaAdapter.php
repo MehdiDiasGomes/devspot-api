@@ -43,7 +43,6 @@ final class AdzunaAdapter implements JobSourcePort
             $params = [
                 'app_id' => $this->appId,
                 'app_key' => $this->appKey,
-                'what' => 'developpeur fullstack',
                 'results_per_page' => 50,
                 'content-type' => 'application/json',
             ];
@@ -90,6 +89,7 @@ final class AdzunaAdapter implements JobSourcePort
                 location: $location,
                 isRemote: false,
                 type: self::JOB_TYPE_MAP[$contractType] ?? JobType::Other,
+                contractLabel: null,
                 salaryMin: $salaryMin,
                 salaryMax: $salaryMax,
                 salaryCurrency: $currency,

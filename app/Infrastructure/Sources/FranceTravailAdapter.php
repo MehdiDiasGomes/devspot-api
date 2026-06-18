@@ -44,7 +44,6 @@ final class FranceTravailAdapter implements JobSourcePort
 
         try {
             $params = [
-                'motsCles' => 'développeur fullstack',
                 'nbMaxResultats' => 150,
             ];
 
@@ -113,12 +112,13 @@ final class FranceTravailAdapter implements JobSourcePort
 
             return JobOffer::create(
                 title: $job['intitule'],
-                company: $job['entreprise']['nom'] ?? 'Non renseigné',
+                company: $job['entreprise']['nom'] ?? '',
                 location: $location,
                 isRemote: false,
                 type: JobTitleHelper::isAlternance($job['intitule'])
                     ? JobType::Internship
                     : (self::JOB_TYPE_MAP[$typeContrat] ?? JobType::Other),
+                contractLabel: $job['typeContratLibelle'] ?? null,
                 salaryMin: null,
                 salaryMax: null,
                 salaryCurrency: null,
