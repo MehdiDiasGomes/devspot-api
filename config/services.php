@@ -44,10 +44,6 @@ return [
         'api_key' => env('BRANDFETCH_API_KEY'),
     ],
 
-    'france_travail' => [
-        'client_id' => env('FRANCE_TRAVAIL_CLIENT_ID'),
-        'client_secret' => env('FRANCE_TRAVAIL_CLIENT_SECRET'),
-    ],
 
     'github' => [
         'client_id'     => env('GITHUB_CLIENT_ID'),
