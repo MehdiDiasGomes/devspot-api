@@ -33,14 +33,12 @@ final class AuthController extends Controller
 
         $socialUser = Socialite::driver($provider)->user();
 
-        $user = User::updateOrCreate(
-            ['provider' => $provider, 'provider_id' => $socialUser->getId()],
-            [
-                'name'   => $socialUser->getName() ?? $socialUser->getNickname() ?? 'User',
-                'email'  => $socialUser->getEmail(),
-                'avatar' => $socialUser->getAvatar(),
-            ],
-        );
+        $user = User::firstOrNew(['email' => $socialUser->getEmail()]);
+        $user->name        = $socialUser->getName() ?? $socialUser->getNickname() ?? 'User';
+        $user->provider    = $provider;
+        $user->provider_id = $socialUser->getId();
+        $user->avatar      = $socialUser->getAvatar();
+        $user->save();
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
