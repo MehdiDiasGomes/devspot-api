@@ -8,6 +8,7 @@ use App\Application\JobOffer\UseCases\FetchJobOffersUseCase;
 use App\Application\JobOffer\UseCases\ListJobOffersUseCase;
 use App\Domain\JobOffer\Ports\JobOfferRepositoryPort;
 use App\Infrastructure\Persistence\Repositories\EloquentJobOfferRepository;
+use App\Infrastructure\Services\BrandfetchService;
 use App\Infrastructure\Sources\AdzunaAdapter;
 use App\Infrastructure\Sources\FranceTravailAdapter;
 use Illuminate\Contracts\Foundation\Application;
@@ -18,6 +19,10 @@ final class JobOfferServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(JobOfferRepositoryPort::class, EloquentJobOfferRepository::class);
+
+        $this->app->bind(BrandfetchService::class, fn () => new BrandfetchService(
+            apiKey: config('services.brandfetch.api_key'),
+        ));
 
         $this->app->bind(FetchJobOffersUseCase::class, function (Application $app): FetchJobOffersUseCase {
             $appId = config('services.adzuna.app_id');

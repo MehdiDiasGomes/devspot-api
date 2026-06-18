@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('jobs:fetch')->hourly();
+Schedule::command('companies:resolve-logos')->hourlyAt(5);
