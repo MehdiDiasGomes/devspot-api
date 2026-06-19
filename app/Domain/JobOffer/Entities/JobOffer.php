@@ -32,7 +32,6 @@ final class JobOffer
         public readonly ?float $latitude = null,
         public readonly ?float $longitude = null,
         public readonly ?string $id = null,
-        public readonly ?string $companyLogoUrl = null,
     ) {}
 
     /**
@@ -87,30 +86,5 @@ final class JobOffer
         );
     }
 
-    /** Returns a copy of this offer with the given logo URL attached. */
-    public function withLogoUrl(string $logoUrl): self
-    {
-        return new self(
-            title: $this->title,
-            company: $this->company,
-            location: $this->location,
-            isRemote: $this->isRemote,
-            type: $this->type,
-            contractLabel: $this->contractLabel,
-            salaryMin: $this->salaryMin,
-            salaryMax: $this->salaryMax,
-            salaryCurrency: $this->salaryCurrency,
-            description: $this->description,
-            tags: $this->tags,
-            source: $this->source,
-            sourceUrl: $this->sourceUrl,
-            sourceId: $this->sourceId,
-            deduplicationHash: $this->deduplicationHash,
-            publishedAt: $this->publishedAt,
-            latitude: $this->latitude,
-            longitude: $this->longitude,
-            id: $this->id,
-            companyLogoUrl: $logoUrl,
-        );
-    }
+
 }
