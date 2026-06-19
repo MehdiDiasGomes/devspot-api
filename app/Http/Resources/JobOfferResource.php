@@ -20,7 +20,6 @@ final class JobOfferResource extends JsonResource
             'id' => $offer->sourceId,
             'title' => $offer->title,
             'company' => $offer->company,
-            'company_logo_url' => $offer->companyLogoUrl,
             'location' => $offer->location,
             'is_remote' => $offer->isRemote,
             'type' => $offer->type->value,

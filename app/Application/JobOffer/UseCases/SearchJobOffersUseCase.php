@@ -6,7 +6,6 @@ namespace App\Application\JobOffer\UseCases;
 
 use App\Domain\JobOffer\ValueObjects\JobOfferFilters;
 use App\Domain\JobOffer\ValueObjects\Page;
-use App\Infrastructure\Services\CompanyLogoEnricher;
 use App\Infrastructure\Sources\AdzunaLiveSearchAdapter;
 
 final class SearchJobOffersUseCase
@@ -15,11 +14,10 @@ final class SearchJobOffersUseCase
 
     public function __construct(
         private readonly AdzunaLiveSearchAdapter $liveSearch,
-        private readonly CompanyLogoEnricher $logoEnricher,
     ) {}
 
     /**
-     * Returns job offers from Adzuna live search, enriched with company logos.
+     * Returns job offers from Adzuna live search.
      * Falls back to a default keyword when no search term is provided.
      */
     public function execute(JobOfferFilters $filters, int $page = 1, int $perPage = 20): Page
@@ -32,10 +30,8 @@ final class SearchJobOffersUseCase
             radius: $filters->radius,
         );
 
-        $enriched = $this->logoEnricher->enrich($offers);
-
         return new Page(
-            items: $enriched,
+            items: $offers,
             total: $total,
             perPage: $perPage,
             currentPage: $page,

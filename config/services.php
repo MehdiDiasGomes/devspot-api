@@ -40,9 +40,6 @@ return [
         'app_key' => env('ADZUNA_APP_KEY'),
     ],
 
-    'brandfetch' => [
-        'api_key' => env('BRANDFETCH_API_KEY'),
-    ],
 
 
     'github' => [
