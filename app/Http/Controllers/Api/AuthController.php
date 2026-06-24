@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 final class AuthController extends Controller
@@ -40,11 +41,11 @@ final class AuthController extends Controller
         $user->avatar      = $socialUser->getAvatar();
         $user->save();
 
-        $token = $user->createToken('auth-token')->plainTextToken;
+        Auth::login($user);
 
         $frontendUrl = rtrim(config('app.frontend_url'), '/');
-
-        return redirect("{$frontendUrl}/auth/callback?token={$token}");
+        
+        return redirect("{$frontendUrl}/auth/callback");
     }
 
     /** Revokes the current Sanctum token (logout). */
