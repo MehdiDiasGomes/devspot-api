@@ -17,15 +17,17 @@ final class JobOfferResource extends JsonResource
         $offer = $this->resource;
 
         return [
-            'id' => $offer->id,
+            'id' => $offer->sourceId,
             'title' => $offer->title,
             'company' => $offer->company,
             'location' => $offer->location,
             'is_remote' => $offer->isRemote,
             'type' => $offer->type->value,
+            'contract_label' => $offer->contractLabel,
             'salary_min' => $offer->salaryMin,
             'salary_max' => $offer->salaryMax,
             'salary_currency' => $offer->salaryCurrency,
+            'description' => $offer->description,
             'tags' => $offer->tags,
             'source' => $offer->source->value,
             'source_url' => $offer->sourceUrl,

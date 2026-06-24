@@ -18,6 +18,7 @@ final class JobOffer
         public readonly ?string $location,
         public readonly bool $isRemote,
         public readonly JobType $type,
+        public readonly ?string $contractLabel,
         public readonly ?int $salaryMin,
         public readonly ?int $salaryMax,
         public readonly ?string $salaryCurrency,
@@ -44,6 +45,7 @@ final class JobOffer
         ?string $location,
         bool $isRemote,
         JobType $type,
+        ?string $contractLabel,
         ?int $salaryMin,
         ?int $salaryMax,
         ?string $salaryCurrency,
@@ -68,6 +70,7 @@ final class JobOffer
             location: $location,
             isRemote: $isRemote,
             type: $type,
+            contractLabel: $contractLabel,
             salaryMin: $salaryMin,
             salaryMax: $salaryMax,
             salaryCurrency: $salaryCurrency,
@@ -82,4 +85,6 @@ final class JobOffer
             longitude: $longitude,
         );
     }
+
+
 }

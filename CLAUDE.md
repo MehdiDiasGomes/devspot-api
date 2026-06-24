@@ -1,14 +1,14 @@
-# DevSpot API — CLAUDE.md
+# JobSpot API — CLAUDE.md
 
 ## Project Overview
 
-**DevSpot** is a job aggregator platform targeting fullstack developers.
-It fetches job offers from multiple third-party platforms, deduplicates them, stores them, and exposes them via a REST API consumed by the Next.js frontend (`devspot-web`).
+**JobSpot** is a universal job aggregator platform covering all professional domains.
+It fetches job offers from multiple third-party platforms, deduplicates them, stores them, and exposes them via a REST API consumed by the Next.js frontend (`jobspot-web`).
 
 ## Architecture
 
 - **Type**: REST API (Laravel, API-only)
-- **Frontend**: separate repo `devspot-web` (Next.js + TailwindCSS + tailwindcss-animated)
+- **Frontend**: separate repo `jobspot-web` (Next.js + TailwindCSS + tailwindcss-animated)
 - **Deployment**: independent from the frontend
 
 ## Tech Stack
@@ -27,9 +27,8 @@ It fetches job offers from multiple third-party platforms, deduplicates them, st
 
 | Platform | Type | API |
 |---|---|---|
-| Remotive | Remote jobs | Free API |
-| Arbeitnow | EU tech jobs | Free API |
-| Adzuna | EU generalist | Free API |
+| France Travail | All domains (FR) | Free API |
+| Adzuna | All domains (EU) | Free API |
 
 ## Domain Logic
 
