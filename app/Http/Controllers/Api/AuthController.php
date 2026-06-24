@@ -26,7 +26,7 @@ final class AuthController extends Controller
 
     /**
      * Handles the OAuth callback, finds or creates the user,
-     * issues a Sanctum token, and redirects to the frontend.
+     * creates a session, and redirects to the frontend.
      */
     public function callback(string $provider): RedirectResponse
     {
@@ -48,11 +48,11 @@ final class AuthController extends Controller
         return redirect("{$frontendUrl}/auth/callback");
     }
 
-    /** Revokes the current Sanctum token (logout). */
+    /** Terminates the current session (logout). */
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
-
+        Auth::guard('web')->logout();
+        
         return response()->json(['message' => 'Logged out successfully.']);
     }
 
