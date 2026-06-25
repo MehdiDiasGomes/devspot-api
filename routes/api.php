@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobOfferController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('health', fn() => response()->json((['status' => 'ok'])));
+
 Route::get('/job-offers', [JobOfferController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
