@@ -1,20 +1,24 @@
 services:
 
-  # ── Laravel app (PHP-FPM + Nginx bundled via serversideup) ───────────────
-  # Exposed on 127.0.0.1:8010 — the host nginx proxies to this port
+  # ── LaravelApp ────────────────────────────────────────────────────────────
   app:
     build: .
-    image: devspot-api:latest
+    container_name: devspot-app
     restart: unless-stopped
-    env_file: .env
-    environment:
-      DB_HOST: postgres
-      REDIS_HOST: redis
     ports:
-      - "127.0.0.1:8010:8080"
+      - "8010:8080"
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     networks: [internal]
 
   # ── PostgreSQL ────────────────────────────────────────────────────────────
@@ -36,8 +40,9 @@ services:
 
   # ── Redis ─────────────────────────────────────────────────────────────────
   redis:
-    image: redis:7-alpine
+    image: redis:latest
     restart: unless-stopped
+    container_name: devspot-redis
     networks: [internal]
 
 

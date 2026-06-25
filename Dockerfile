@@ -1,25 +1,25 @@
-# Stage 1 — Install Composer dependencies in isolation
-FROM composer:2 AS vendor
+FROM php:8.5-cli
 
-WORKDIR /app
+WORKDIR /var/www/html
+
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    zip \
+    unzip \
+    curl \
+    && docker-php-ext-install pdo pdo_pgsql
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock ./
+
 RUN composer install \
-    --no-dev \
     --optimize-autoloader \
     --no-scripts \
     --no-interaction
 
 COPY . .
-RUN composer run-script post-autoload-dump
 
-# Stage 2 — Production image (PHP-FPM + Nginx bundled)
-FROM serversideup/php:8.4-fpm-nginx
+EXPOSE 8080
 
-USER root
-
-COPY --chown=www-data:www-data --from=vendor /app /var/www/html
-
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-USER www-data
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
