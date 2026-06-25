@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Auth\UseCases\GetAuthenticatedUserUseCase;
 use App\Http\Controllers\Controller;
-use App\Domain\Auth\Entities\User;
+use App\Application\Auth\UseCases\CallbackUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,12 @@ use Laravel\Socialite\Facades\Socialite;
 final class AuthController extends Controller
 {
     private const ALLOWED_PROVIDERS = ['github', 'google'];
+
+    public function __construct(
+        private readonly CallbackUseCase $callBackUseCase,
+        private readonly GetAuthenticatedUserUseCase $getAuthenticatedUserUseCase
+    ) {
+    }
 
     /** Redirects the browser to the OAuth provider consent page. */
     public function redirect(string $provider): RedirectResponse
@@ -32,39 +39,25 @@ final class AuthController extends Controller
     {
         abort_unless(in_array($provider, self::ALLOWED_PROVIDERS, true), 404);
 
-        $socialUser = Socialite::driver($provider)->user();
-
-        $user = User::firstOrNew(['email' => $socialUser->getEmail()]);
-        $user->name        = $socialUser->getName() ?? $socialUser->getNickname() ?? 'User';
-        $user->provider    = $provider;
-        $user->provider_id = $socialUser->getId();
-        $user->avatar      = $socialUser->getAvatar();
-        $user->save();
-
-        Auth::login($user);
-
-        $frontendUrl = rtrim(config('app.frontend_url'), '/');
-        
-        return redirect("{$frontendUrl}/auth/callback");
+        return redirect($this->callBackUseCase->execute($provider));
     }
 
     /** Terminates the current session (logout). */
     public function logout(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
-        
         return response()->json(['message' => 'Logged out successfully.']);
     }
 
     /** Returns the authenticated user. */
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user();
+        $user = $this->getAuthenticatedUserUseCase->execute($request->user());
 
         return response()->json([
-            'id'     => $user->id,
-            'name'   => $user->name,
-            'email'  => $user->email,
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
             'avatar' => $user->avatar,
         ]);
     }
