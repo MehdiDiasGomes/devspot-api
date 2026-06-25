@@ -6,7 +6,7 @@ namespace App\Infrastructure\Persistence\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;
+use App\Domain\Auth\Entities\User;
 
 final class JobApplicationModel extends Model
 {
