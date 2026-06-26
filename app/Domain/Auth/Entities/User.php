@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Auth\Entities;
 
+use App\Infrastructure\Persistence\Models\JobApplicationModel;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +16,11 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
 
     protected $fillable = [
         'name',
@@ -34,12 +40,12 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
     public function applications(): HasMany
     {
-        return $this->hasMany(Application::class);
+        return $this->hasMany(JobApplicationModel::class);
     }
 }

@@ -4,12 +4,23 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Models;
 
+use App\Domain\Auth\Entities\User;
+use Database\Factories\JobApplicationFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Domain\Auth\Entities\User;
 
 final class JobApplicationModel extends Model
 {
+
+    /** @use HasFactory<JobApplicationFactory> */
+    use HasFactory;
+
+    protected static function newFactory(): JobApplicationFactory
+    {
+        return JobApplicationFactory::new();
+    }
+
     protected $table = 'applications';
 
     protected $fillable = [
